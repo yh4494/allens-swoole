@@ -10,7 +10,7 @@ class client_class{
         $this->client = new \swoole_client(SWOOLE_SOCK_TCP);
     }
     public function connect() {
-        if( !$this->client->connect("127.0.0.1", 9501 , 1) ) {
+        if( !$this->client->connect(env('SERVER_IP', '127.0.0.1'), 9580 , 1) ) {
             echo "Error: {$this->client->errMsg}[{$this->client->errCode}]\n";
         }
     }
