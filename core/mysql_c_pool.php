@@ -37,6 +37,8 @@ class mysql_c_pool extends pool {
         $this->server->on('Finish' , [$this, 'my_onFinish']);
 
         $this->server->start();
+
+        echo 'swoole 服务已经启动';
     }
 
     function my_onReceive($serv, $fd, $from_id, $data)
