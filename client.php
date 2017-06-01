@@ -1,5 +1,9 @@
 <?php
 
+define('APP_PATH', __DIR__);
+
+require('./Lib/functions.php');
+
 $client = new \Core\client_class();
 
 $client->connect();
