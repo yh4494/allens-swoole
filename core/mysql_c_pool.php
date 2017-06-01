@@ -63,7 +63,7 @@ class mysql_c_pool extends pool {
     {
         static $link = null;
         if ($link == null) {
-            $link = mysqli_connect("172.16.27.96", "root", "", "test");
+            $link = mysqli_connect("127.0.0.1", "root", "", "test", '3306');
             if (!$link) {
                 $link = null;
                 $serv->finish("ER:" . mysqli_error($link));
