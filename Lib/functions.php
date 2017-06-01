@@ -11,7 +11,7 @@ spl_autoload_register(function($class){
         return substr($temp, 0, -1);
     };
 
-    if ($namespace == 'Core'){
+    if ($namespace() == 'Core'){
         require APP_PATH . '/core/' . $name . '.php';
     }
 });

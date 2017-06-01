@@ -25,7 +25,7 @@ class mysql_c_pool extends pool {
 
     public function serverStart()
     {
-        $this->server   = new swoole_server(env('SERVER_IP', '127.0.0.1', SWOOLE_PROCESS), 9580);
+        $this->server   = new \swoole_server(env('SERVER_IP', '127.0.0.1', SWOOLE_PROCESS), 9580);
 
         $this->server->set(array(
             'worker_num'      => $this->work_num,
