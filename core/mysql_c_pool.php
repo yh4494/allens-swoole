@@ -25,7 +25,7 @@ class mysql_c_pool extends pool {
 
     public function serverStart()
     {
-        $this->server   = new \swoole_server(env('SERVER_IP', '127.0.0.1', SWOOLE_PROCESS), 9580);
+        $this->server   = new \swoole_server(env('SERVER_IP', '127.0.0.1'), 9580, SWOOLE_PROCESS, SWOOLE_SOCK_TCP);
 
         $this->server->set(array(
             'worker_num'      => $this->work_num,
@@ -63,7 +63,7 @@ class mysql_c_pool extends pool {
     {
         static $link = null;
         if ($link == null) {
-            $link = mysqli_connect("127.0.0.1", "root", "root", "test");
+            $link = mysqli_connect("172.16.27.96", "root", "", "test");
             if (!$link) {
                 $link = null;
                 $serv->finish("ER:" . mysqli_error($link));
