@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Abs;
+namespace Core;
 
 abstract class pool{
 
