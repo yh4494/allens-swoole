@@ -3,8 +3,17 @@
 spl_autoload_register(function($class){
     $namespaceArr = explode('\\', $class);
     $name         = $namespaceArr[count($namespaceArr) - 1];
+    $namespace    = function() use ($namespaceArr){
+        $temp     = '';
+        for ($i = 0; $i < count($namespaceArr) - 1; $i ++){
+            $temp.= $namespaceArr[$i] . '\\';
+        }
+        return substr($temp, 0, -1);
+    };
 
-    require APP_PATH . '/core/' . $name . '.php';
+    if ($namespace == 'Core'){
+        require APP_PATH . '/core/' . $name . '.php';
+    }
 });
 
 function getConfigs(){
