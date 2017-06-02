@@ -8,7 +8,14 @@ class client_class{
 
     public function __construct() {
         $this->client = new \swoole_client(SWOOLE_SOCK_TCP | SWOOLE_KEEP);
+
+        $this->client->on('Receive', array($this, 'onReceive'));
     }
+
+    public function onReceive( $cli, $data ) {
+        echo "Get Message From Server: {$data}\n";
+    }
+
     public function connect() {
         if( !$this->client->connect(env('SERVER_IP', '127.0.0.1'), 9580 , 1) ) {
             echo "Error: {$this->client->errMsg}[{$this->client->errCode}]\n";
