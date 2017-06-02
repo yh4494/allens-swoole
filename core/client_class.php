@@ -7,7 +7,7 @@ class client_class{
     public $client;
 
     public function __construct() {
-        $this->client = new \swoole_client(SWOOLE_SOCK_TCP);
+        $this->client = new \swoole_client(SWOOLE_SOCK_TCP | SWOOLE_KEEP, SWOOLE_SOCK_ASYNC);
     }
     public function connect() {
         if( !$this->client->connect(env('SERVER_IP', '127.0.0.1'), 9580 , 1) ) {
