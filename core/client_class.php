@@ -7,7 +7,7 @@ class client_class{
     public $client;
 
     public function __construct() {
-        $this->client = new \swoole_client(SWOOLE_SOCK_TCP | SWOOLE_KEEP);
+        $this->client = new \swoole_client(SWOOLE_SOCK_TCP | SWOOLE_KEEP, SWOOLE_SOCK_ASYNC);
 
         $this->client->on('Receive', array($this, 'onReceive'));
     }
