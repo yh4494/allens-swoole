@@ -10,6 +10,6 @@ $client->connect();
 
 $client->client->send('select * from person');
 
-echo $client->recv();
+echo $client->client->recv();
 
 ?>
