@@ -44,7 +44,7 @@ class mysql_c_pool extends pool {
     function my_onReceive($serv, $fd, $from_id, $data)
     {
         //taskwait就是投递一条任务，这里直接传递SQL语句了,然后阻塞等待SQL完成
-        $result = $serv->taskwait("show tables");
+        $result = $serv->taskwait($data);
         if ($result !== false) {
             list($status, $db_res) = explode(':', $result, 2);
             if ($status == 'OK') {
@@ -70,7 +70,7 @@ class mysql_c_pool extends pool {
                 return;
             }
         }
-        fwrite(STDOUT, $sql);
+        fwrite(STDOUT, '\n' . $sql);
         $result = $link->query($sql);
         if (!$result) {
             $serv->finish("ER:" . mysqli_error($link));

@@ -16,6 +16,10 @@ spl_autoload_register(function($class){
     }
 });
 
+function t_print($content){
+    fwrite(STDOUT, $content);
+}
+
 function getConfigs(){
     $env_path = APP_PATH . '/.env';
     $o        = @fopen($env_path, 'r');
