@@ -70,8 +70,7 @@ class mysql_c_pool extends pool {
                 return;
             }
         }
-
-        $link->query('use test');
+        echo $sql;
         $result = $link->query($sql);
         if (!$result) {
             $serv->finish("ER:" . mysqli_error($link));
