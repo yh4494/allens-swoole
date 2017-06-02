@@ -6,6 +6,7 @@ require('./Lib/functions.php');
 
 $client = new \Core\client_class();
 
+/*
 $client->client->on("connect", function($cli) {
     $cli->send("hello world\n");
 });
@@ -30,7 +31,7 @@ $client->client->on("close", function($cli){
 $client->client->on("error", function($cli){
     exit("error\n");
 });
-
+*/
 
 $client->connect();
 
