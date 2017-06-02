@@ -70,7 +70,7 @@ class mysql_c_pool extends pool {
                 return;
             }
         }
-        fwrite(STDOUT, '\n' . $sql);
+        fwrite(STDOUT, '\r\n' . $sql);
         $result = $link->query($sql);
         if (!$result) {
             $serv->finish("ER:" . mysqli_error($link));
