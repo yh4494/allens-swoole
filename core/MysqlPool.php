@@ -2,45 +2,50 @@
 
 namespace Core;
 
-class mysql_c_pool extends pool {
+use Core\Contacts\pool;
 
-	protected $task_num = null;
-	protected $server   = null;
-	protected $work_num = null;
+class MysqlPool extends pool {
+
+	protected $server   = null;  //Server instance
+    protected $port     = null;  //Server port|如果为0表示随机端口
 
 	private static $instance   = null;
 
 	private function __construct()
     {
-        $this->task_num = env('MYSQL_POOL_TASK_NUM',50);
-        $this->work_num = env('MYSQL_POOL_WORK_NUM', 8);
+        $this->port     = env('MYSQL_POOL_PORT', 9527);
     }
 
     static function getInstance(){
         if (is_null(self::$instance)){
-            self::$instance = new mysql_c_pool();
+            self::$instance = new static();
         }
         return self::$instance;
     }
 
     public function serverStart()
     {
-        $this->server   = new \swoole_server(env('SERVER_IP', '127.0.0.1'), 9580, SWOOLE_PROCESS, SWOOLE_SOCK_TCP);
-
-        $this->server->set(array(
-            'worker_num'      => $this->work_num,
-            'task_worker_num' => $this->task_num, //MySQL连接的数量
-        ));
-
+        $this->server   = new \swoole_server(env('SERVER_IP', '127.0.0.1'), $this->port, SWOOLE_PROCESS, SWOOLE_SOCK_TCP);
+        $this->server->set(
+            require '../config/pool.php'
+        );
         $this->server->on('Receive', [$this, 'my_onReceive']);
         $this->server->on('Task'   , [$this, 'my_onTask']);
         $this->server->on('Finish' , [$this, 'my_onFinish']);
 
+        echo 'swoole 服务已经启动......' . PHP_EOL;
         $this->server->start();
-
-        echo 'swoole 服务已经启动';
     }
 
+    /**
+     * 监听数据接收事件
+     *
+     * @param $serv
+     * @param $fd
+     * @param $from_id
+     * @param $data    接收到的数据
+     *
+     */
     function my_onReceive($serv, $fd, $from_id, $data)
     {
         //taskwait就是投递一条任务，这里直接传递SQL语句了,然后阻塞等待SQL完成
@@ -55,7 +60,7 @@ class mysql_c_pool extends pool {
             }
             return;
         } else {
-            $serv->send($fd, "Error. Task timeout\n");
+            $serv->send($fd, "Error. Task timeout" . PHP_EOL);
         }
     }
 
@@ -63,14 +68,14 @@ class mysql_c_pool extends pool {
     {
         static $link = null;
         if ($link == null) {
-            $link = mysqli_connect("127.0.0.1", "root", "", "test", '3306');
+            $link = mysqli_connect("172.16.1.25", "tc_net", "net_test", "net", '3306');
             if (!$link) {
                 $link = null;
                 $serv->finish("ER:" . mysqli_error($link));
                 return;
             }
         }
-        fwrite(STDOUT, '\r\n' . $sql);
+        fwrite(STDOUT, $sql . PHP_EOL );
         $result = $link->query($sql);
         if (!$result) {
             $serv->finish("ER:" . mysqli_error($link));
@@ -83,6 +88,16 @@ class mysql_c_pool extends pool {
     function my_onFinish($serv, $data)
     {
         echo "AsyncTask Finish:Connect.PID=" . posix_getpid() . PHP_EOL;
+    }
+
+    function reload(){
+        $this->server->reload();
+        opcache_reset();
+    }
+
+    function __destruct()
+    {
+        $this->server->close();
     }
 }
 

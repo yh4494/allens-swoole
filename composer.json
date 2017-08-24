@@ -1,0 +1,21 @@
+{
+    "name": "allens/allens-swoole",
+    "description": "Just for creating a convenient code for dev!",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Allens Stevon",
+            "email": "allensstevon@gmail.com"
+        }
+    ],
+    "require": {
+        "monolog/monolog": "^1.23"
+    },
+    "autoload":{
+        "psr-4":{
+            "Core\\":"core",
+            "App\\":"app",
+            "ASwooleClient\\":"aSwooleClient/src"
+        }
+    }
+}

@@ -2,8 +2,8 @@
 
 define('APP_PATH', __DIR__);
 
-require('./Lib/functions.php');
+require 'bootstrap/app.php';
 
-$mysql_pool = \Core\mysql_c_pool::getInstance();
+$server = \Core\SwooleServer::getInstance($app);
 
-$mysql_pool->serverStart();
+$server->serverStart();

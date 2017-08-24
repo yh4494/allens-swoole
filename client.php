@@ -2,14 +2,22 @@
 
 define('APP_PATH', __DIR__);
 
-require('./Lib/functions.php');
+require 'bootstrap/app.php';
 
-$client = new \Core\client_class();
+$client = new \ASwooleClient\ClientServer();
 
-$client->connect();
+$client->connect('127.0.0.1', 9027);
 
-$client->client->send('select * from person');
+//$client->exec('select * from steward limit 1', function($result){
+//    echo $result;
+//});
 
-echo $client->client->recv();
+//$client->call('hello', 'IndexController', [], function($data, $code){
+//    echo $data;
+//});
 
-?>
+$client->hello();
+
+//$client->call('hello', 'IndexController', [], function($data, $error){
+//    var_dump($data);
+//});
